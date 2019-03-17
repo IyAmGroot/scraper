@@ -6,66 +6,84 @@ module.exports = function(app) {
   //   var router = app.Router();
 
   app.get("/", function(req, res) {
-    console.log("hello");
-    var results = [{}];
-    results[0].title = "test title";
-    results[0].summary = "test summary";
-    results[0].articleUrl = "articleUrl";
-    results[0].imageUrl = "imgUrl";
+    db.Article.find({ title: { $exists: true } })
+      .then(function(dbArticle) {
+        res.render("index", {
+          title: "Big Fancy Title",
+          articles: dbArticle
+        });
+      })
+      .catch(function(err) {
+        res.json(err);
+      });
+  });
 
-    // var hbsObject = {
-    //   articles: results
-    // };
-    console.log(results);
-    var articles = results;
-
-    res.render("index", {
-      title: "Big Fancy Title",
-      articles: results
-    });
+  app.get("/comments/:id", function(req, res) {
+    console.log("comments path");
+    db.Comment.find({});
+    res.render("comments");
   });
 
   app.get("/scrape", function(req, res) {
     //Scrape the site
-
-    axios.get("https://ftw.usatoday.com").then(function(response) {
+    axios.get("https://www.nytimes.com/").then(function(response) {
       var $ = cheerio.load(response.data);
-
-      var results = {};
-      // console.log(response.data);
-      var i = 0;
+      var results = [{}];
       $("article").each(function(i, element) {
-        //var imgLink = $(element).find("a").find("img").attr("data-srcset").split(",")[0].split(" ")[0];
-        // var title = $(element)
-        //   .find("title")
-        //   .text();
-        // var url = $(element)
-        //   .find("href")
-        //   .text();
-        // // var imgUrl = $(element).find("img");
-        // var summary = $(element)
-        //   .find("div.content")
-        //   .find("p")
-        //   .text();
-        // console.log(title);
-        // i++;
-        // console.log(i);
-        // results.title = title;
-        // results.summary = summary;
-        // results.articleUrl = url;
-        // // results.imageUrl = imgUrl;
-        results.title = "test title";
-        results.summary = "test summary";
-        results.articleUrl = "articleUrl";
-        results.imageUrl = "imgUrl";
-      });
-      res.send(results);
-    });
-    // .then(function(resultsDb) {
-    //   res.send(resultsDb);
-    // });
+        var myResults = {};
+        var title = $(element)
+          .find("h2")
+          .text();
+        var url = $(element)
+          .find("a")
+          .attr("href");
+        var imgUrl = $(element)
+          .find("a")
+          .find("img")
+          .attr("src");
+        var imgUrl2 = $(element)
+          .find("figure")
+          .find("img")
+          .attr("src");
+        var summary = $(element)
+          .find("p")
+          .text();
+        console.log(i + " : " + title + " : " + imgUrl2);
 
-    //Insert into db
-    // res.send("Scrape Complete");
+        if (typeof imgUrl === "undefined") {
+          if (typeof imgUrl2 === "undefined") {
+            imgUrl =
+              "https://cidco-smartcity.niua.org/wp-content/uploads/2017/08/No-image-found.jpg";
+          } else {
+            imgUrl = imgUrl2;
+          }
+        }
+        if (typeof summary === "undefined") {
+          summary = "No further details.";
+        }
+        myResults.title = title;
+        myResults.summary = summary;
+        myResults.articleUrl = url;
+        myResults.imageUrl = imgUrl;
+        if (!db.Article.findOne({ title: title })) {
+          results.push(myResults);
+        }
+      });
+      console.log(results.length);
+      //Insert into db
+      if (results.length === 1 && typeof results.title === "undefined") {
+        //Do not create:  screwy bit of code here that seems to generate a crappy record with null data.
+      } else {
+        db.Article.create(results)
+          .then(function(dbArticle) {
+            console.log(dbArticle);
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      }
+
+      res.redirect("/");
+    });
   });
 };

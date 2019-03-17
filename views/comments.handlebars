@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="row topRow justify-content-center">
+        <div class="md-col-12">
+            <div class="jumbotron">
+                <h1 class="display-4">Add a Comment!</h1>
+                <p class="lead">On this page you can view an existing comment, edit the comment or add your own. All
+                    fields are required in order to save data on this form.</p>
+                <hr class="my-4">
+                <p>Click the submit button to save.
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="container commentContainer">
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" action="/comment">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input name="name" required type="text" class="form-control" id="name" aria-describedby="nameHelp"
+                        placeholder="Enter name">
+                    <small id="nameHelp" class="form-text text-muted">You must enter a name to comment.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="myTextarea">Comment</label>
+                    <textarea name="comment" required class="form-control" id="myTextarea" rows="5"></textarea>
+                </div>
+                <div>
+                    <input type="hidden" name="articleId" data-id={{articleId}}>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

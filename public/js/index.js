@@ -1,10 +1,25 @@
+import { get } from "http";
+
 $(document).ready(function() {
   $("#scrapeBtn").on("click", function(event) {
     event.preventDefault();
-    alert("Boom!");
     scrapeIt();
   });
 });
+
+$(document).on("click", ".btnComment", function() {
+  // event.preventDefault();
+  console.log("Boom");
+  // getComments();
+});
+function getComments() {
+  let myId = $(this).attr("data-id");
+
+  console.log("calling comments");
+  $.get.getJSON("/comments/:" + myId, function(data) {
+    console.log(data);
+  });
+}
 
 function scrapeIt() {
   // Grab the articles as a json

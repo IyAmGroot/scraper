@@ -1,3 +1,19 @@
 .topRow {
   background-color: olive;
+  background-image: url(../img/news.jpg);
+}
+.myImage {
+  padding-right: 20px;
+}
+.leftSide {
+  padding-right: 5px;
+}
+.jumbotron {
+  margin-top: 20px;
+  opacity: 0.72;
+}
+.commentContainer {
+  background-color: #cfc5a8;
+  margin-top: 20px;
+  padding-bottom: 20px;
 }

@@ -1,6 +1,6 @@
 // Exporting an object containing all of our models
 
 module.exports = {
-  Book: require("./Article"),
-  Library: require("./Comment")
+  Article: require("./Article"),
+  Comment: require("./Comment")
 };

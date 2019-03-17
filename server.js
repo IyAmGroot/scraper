@@ -2,8 +2,8 @@
 var express = require("express");
 var mongoose = require("mongoose");
 // Require axios and cheerio. This makes the scraping possible
-var axios = require("axios"); //for calling api
-var cheerio = require("cheerio"); //for scraping
+// var axios = require("axios"); //for calling api
+// var cheerio = require("cheerio"); //for scraping
 var exphbs = require("express-handlebars");
 
 // Initialize Express
@@ -11,8 +11,8 @@ var app = express();
 var db = require("./models");
 
 // Database configuration
-var databaseUrl = "scrapers";
-var collections = ["scrapedData"];
+// var databaseUrl = "scraper2";
+// var collections = ["scrapedData"];
 
 // Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static("public"));
