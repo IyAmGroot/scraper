@@ -42,8 +42,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, function(err) {
     console.log("connected");
   }
 });
-
+var PORT = process.env.PORT || 3030;
 // Listen on port 3030
-app.listen(3030, function() {
+app.listen(PORT, function() {
   console.log("App running on port 3030!");
 });
