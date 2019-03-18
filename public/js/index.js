@@ -1,24 +1,32 @@
-import { get } from "http";
+// import { get } from "http";
 
 $(document).ready(function() {
-  $("#scrapeBtn").on("click", function(event) {
+  // $("#scrapeBtn").on("click", function(event) {
+  //   event.preventDefault();
+  //   // scrapeIt();
+  // });
+
+  $(document).on("click", ".btnComment", function(event) {
     event.preventDefault();
-    scrapeIt();
+    var myId = $(this).attr("data-id");
+    console.log(myId);
+
+    getComments(myId);
   });
 });
 
-$(document).on("click", ".btnComment", function() {
-  // event.preventDefault();
-  console.log("Boom");
-  // getComments();
-});
-function getComments() {
-  let myId = $(this).attr("data-id");
+function getComments(articleId) {
+  let queryString = "/comments/" + articleId;
+  let articleData = { articleId: articleId };
 
-  console.log("calling comments");
-  $.get.getJSON("/comments/:" + myId, function(data) {
-    console.log(data);
+  console.log(queryString);
+  $.ajax({
+    method: "GET",
+    url: queryString
   });
+  // $.get.getJSON("/comments/" + myId, function(data) {
+  //   console.log(data);
+  // });
 }
 
 function scrapeIt() {

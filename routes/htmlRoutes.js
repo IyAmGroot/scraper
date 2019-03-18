@@ -9,7 +9,7 @@ module.exports = function(app) {
     db.Article.find({ title: { $exists: true } })
       .then(function(dbArticle) {
         res.render("index", {
-          title: "Big Fancy Title",
+          title: "Scrape This! - Home",
           articles: dbArticle
         });
       })
@@ -17,11 +17,57 @@ module.exports = function(app) {
         res.json(err);
       });
   });
+  app.post("/comment", function(req, res) {
+    //Logic that was to go here
+    // get noteId and create new note and update article if id variable = X otherwise update Note
+    // if(note_id = "X"){
+    //   db.Note.create()
+    //   .then(function(req.body.data) {
+    //     db.Article.findOneAndUpdate({"_id": req.body.id})
+    //     .then(function(dbArticle){
+    //       res.render("index", {
+    //         title: "Scrape This! - Home",
+    //         articles: dbArticle
+    //       });
+    //       })
+    //     })
+    //   })
+    //   .catch(function(err) {
+    //     console.log(err);
+    //   });
+    // }
+  });
 
-  app.get("/comments/:id", function(req, res) {
-    console.log("comments path");
-    db.Comment.find({});
-    res.render("comments");
+  app.get("/comments/:articleId", function(req, res) {
+    //The plan:
+    //Find the lone article by its id
+    //Get Comment data if it exists
+    //Pass the Article & Comment to the comment.handlebars view.
+    console.log(req.params.articleId);
+    db.Article.findOne({ _id: req.params.articleId })
+      .populate("Comment")
+      .exec(function(err, dbArticle) {
+        if (err) {
+          return res.json(err);
+        }
+        console.log(dbArticle); //I have a valid object here.
+        //This is where I get stuck.
+        //The comments handlebar view does not display.
+        res.render("comments", {
+          title: "Scrape This! - Comments",
+          comment: dbArticle
+        });
+      });
+    // .then(function(dbArticle) {
+    //   console.log(dbArticle);
+    //   res.render("comments", {
+    //     title: "Scrape This! - Comments",
+    //     comment: dbArticle
+    //   });
+    // })
+    // .catch(function(err) {
+    //   res.json(err);
+    // });
   });
 
   app.get("/scrape", function(req, res) {

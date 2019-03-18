@@ -13,6 +13,7 @@ var db = require("./models");
 // Database configuration
 // var databaseUrl = "scraper2";
 // var collections = ["scrapedData"];
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scraper2";
 
 // Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static("public"));
@@ -34,17 +35,13 @@ require("./routes/htmlRoutes")(app);
 // app.use(aRoutes);
 
 // Connect to the Mongo DB
-mongoose.connect(
-  "mongodb://localhost/scraper2",
-  { useNewUrlParser: true },
-  function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("connected");
-    }
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, function(err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("connected");
   }
-);
+});
 
 // Listen on port 3030
 app.listen(3030, function() {
